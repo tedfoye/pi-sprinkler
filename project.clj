@@ -11,6 +11,6 @@
   :repositories [["sonatype" "https://oss.sonatype.org/content/groups/public"]]
   :plugins [[cider/cider-nrepl "0.8.2"]]
   :main pi-sprinkler.core
-  :aot [pi-sprinkler.core]
+  :aot [pi-sprinkler.core pi-sprinkler.demo]
   :target-path "target/%s"
   :uberjar-exclusions ["cider"])

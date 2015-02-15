@@ -28,14 +28,5 @@
   (println "pi sprinkler running")
   (io/init)
   (io/shift-in [0 0 0 0 0 0 0 0])
-  (<!! (run (create-events-chan)))
-  (comment
-    (io/shift-in [1 0 0 0 0 0 0 0])
-    (Thread/sleep 2000)
-    (io/shift-in [1 1 0 0 0 0 0 0])
-    (Thread/sleep 2000)
-    (io/shift-in [0 1 0 0 0 0 0 0])
-    (Thread/sleep 2000)
-    (io/shift-in [1 0 0 0 0 0 0 0])
-    (Thread/sleep 2000)
-    (io/shift-in [0 0 0 0 0 0 0 0])))
+  (<!! (run (create-events-chan))))
+
