@@ -16,7 +16,8 @@
 (def json-factory   (.. JacksonFactory (getDefaultInstance)))
 (def http-transport (.. GoogleNetHttpTransport (newTrustedTransport)))
 (def scopes         (HashSet. #{CalendarScopes/CALENDAR CalendarScopes/CALENDAR_READONLY}))
-(def one-hour       (* 1000 60 60))
+(def one-hour-milli (* 1000 60 60))
+(def zone-regex     #"(zone).+?([\d]+).+?(\d+)")
                                 
 (defn ^:private private-key []
   (File. "src/Sprinkler-c7e9b389d630.p12"))
@@ -36,15 +37,16 @@
     (build)))
 
 (defn ^:private parse-zones [s]
-  (let [re #"(zone).+?([\d]+).+?(\d+)"]
-    (for [[_ _ zone dur] (re-seq re s)]
-      [(Integer. zone) (Integer. dur)])))
+  (if s
+    (for [[_ _ zone dur] (re-seq zone-regex s)]
+      [(Integer. zone) (Integer. dur)])
+    []))
 
 (defn query-calendar []
   (let [service (create-calendar (build-credential))
         events (.. service (events) (list calendar-id))
-        min (DateTime. (- (System/currentTimeMillis) one-hour))
-        max (DateTime. (+ (System/currentTimeMillis) one-hour))
+        min (DateTime. (- (System/currentTimeMillis) one-hour-milli))
+        max (DateTime. (+ (System/currentTimeMillis) one-hour-milli))
         query (.. events (setTimeMin min) (setTimeMax max))]
     (.. query (execute) (getItems))))
 
